@@ -7,7 +7,7 @@
     'author': 'Zmakan Technical Solutions',
     'company': 'Zmakan Technical Solutions',
     'website': 'www.zmakan.com',
-    'version': '14.0',
+    'version': '14.00',
 
     'depends': ['base','website'],
     'data': [
