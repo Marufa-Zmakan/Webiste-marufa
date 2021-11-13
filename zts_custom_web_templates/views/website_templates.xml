@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="assets_frontend" inherit_id="portal.assets_frontend" name="Website Assets">
+    <xpath expr="//link[last()]" position="after">
+        <link rel="stylesheet" type="text/scss" href="/zts_custom_web_templates/static/src/scss/template.scss"/>
+    </xpath>
+    </template>
+	<template id="template_header_contact_oe_structure_header_contact_1" inherit_id="website.template_header_contact" name="Template Header Contact (oe_structure_header_contact_1)">
+		<xpath expr="//*[hasclass('oe_structure')][@id='oe_structure_header_contact_1']" position="replace">
+			<div class="oe_structure oe_structure_solo" id="oe_structure_header_contact_1">
+				<section class="s_text_block pt8 pb8 o_cc o_cc2" data-snippet="s_text_block" data-name="Text">
+					<div class="container">
+						<div class="row align-items-center">
+							<div class="col-lg-6">
+								<small>
+									<span class="text-muted"><b>Contact us</b></span>
+									<i class="fa fa-1x fa-fw fa-phone ml-3 mr-2"/><a href="tel:+1 (650) 555-0111">+1 (650) 555-0111</a>
+									<i class="fa fa-1x fa-fw fa-envelope ml-3 mr-2"/><span><a href="mailto:info@yourcompany.example.com">info@yourcompany.example.com</a></span>
+								</small>
+							</div>
+							<div class="col-lg-6 text-lg-right">
+								<div class="s_share no_icon_color" data-snippet="s_share" data-name="Social Media">
+									<small class="s_share_title text-muted"><b>Follow us</b></small>
+									<a href="/website/social/facebook" class="s_share_facebook" target="_blank">
+										<i class="fa fa-facebook m-1"/>
+									</a>
+									<a href="/website/social/twitter" class="s_share_twitter" target="_blank">
+										<i class="fa fa-twitter m-1"/>
+									</a>
+									<a href="/website/social/linkedin" class="s_share_linkedin" target="_blank">
+										<i class="fa fa-linkedin m-1"/>
+									</a>
+									<a href="/website/social/github" class="s_share_github" target="_blank">
+										<i class="fa fa-github m-1"/>
+									</a>
+									<a href="/website/social/youtube" class="s_share_youtube" target="_blank">
+										<i class="fa fa-youtube m-1"/>
+									</a>
+									<a href="/website/social/instagram" class="s_share_instagram" target="_blank">
+										<i class="fa fa-instagram m-1"/>
+									</a>
+									<t t-set="flags" t-value="True"/>
+									<t id="language_selector_call" t-call="portal.language_selector">
+										<t t-set="_div_classes" t-value="(_div_classes or '') + ' dropdown'"/>
+									</t>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</xpath>
+	</template>
+
+	<template name="Brand Promotion Message" id="web.brand_promotion_message">
+        <t t-set="odoo_logo">
+            <a target="_blank" t-attf-href="http://www.odoo.com?utm_source=db&amp;utm_medium=#{_utm_medium}" class="badge badge-light">
+                <img alt="Odoo" src="/web/static/src/img/odoo_logo_tiny.png" style="height: 1em; vertical-align: baseline;"/>
+            </a>
+        </t>
+<!--        <t t-set="final_message">Powered by %s%s</t>-->
+<!--        <t t-raw="final_message % (odoo_logo, _message and ('- %s' % _message) or '')"/>-->
+    </template>
+
+</odoo>
+
+

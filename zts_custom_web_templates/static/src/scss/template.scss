@@ -1,0 +1,14 @@
+.s_share{
+    .js_language_selector{
+    @media only screen and (max-width: 768px){
+        display: none !important;}
+    }
+}
+
+.o_footer_copyright {
+    .js_language_selector {
+    @media (min-width: 768px) and (max-width: 1024px){
+        display: none !important;}
+    }
+}
+
