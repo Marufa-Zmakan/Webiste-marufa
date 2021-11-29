@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Form View to Modify it -->
+    <record id="view_warehouse_orderpoint_form_inherit" model="ir.ui.view">
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id" ref="stock.view_warehouse_orderpoint_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='warehouse_id']" position="before">
+                <!-- Add your fields or attributes here -->
+                <field name="one_or_multi_stock" required="1"/>
+                <field name="warehouse_ids" widget="many2many_tags"
+                       attrs="{'required':[('one_or_multi_stock', '=', 'multi')],
+                       'invisible':[('one_or_multi_stock', '=', 'one')]}"
+                       options="{'no_create': True}"/>
+                <field name="location_ids" widget="many2many_tags"
+                       attrs="{'required':[('one_or_multi_stock', '=', 'multi')],
+                       'invisible':[('one_or_multi_stock', '=', 'one')]}"
+                       options="{'no_create': True}"
+                       domain="[('id', 'in', allowed_location_ids)]"/>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='warehouse_id']" position="attributes">-->
+            <!--                <attribute name="attrs">{'required':[('one_or_multi_stock', '=', 'one')],-->
+            <!--                    'invisible':[('one_or_multi_stock', '=', 'multi')]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='location_id']" position="attributes">
+                <attribute name="attrs">{'required':[('one_or_multi_stock', '=', 'one')],
+                    'invisible':[('one_or_multi_stock', '=', 'multi')]}
+                </attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
