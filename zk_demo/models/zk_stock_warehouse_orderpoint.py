@@ -20,14 +20,33 @@ class ReorderingRulesInherit(models.Model):
             if orderpoint.one_or_multi_stock == 'one':
                 return super(ReorderingRulesInherit, self)._compute_qty_to_order()
             else:
-                if orderpoint.location_ids:
-                    params = []
-                    sql = "SELECT SUM(quantity) FROM stock_quant WHERE location_id IN %s;"
-                    params.append(tuple(orderpoint.location_ids.ids))
-                    self.env.cr.execute(sql, params)
-                    result = self.env.cr.dictfetchone()
-                    if result['sum'] <= orderpoint.product_min_qty:
-                        orderpoint.qty_to_order = orderpoint.product_max_qty - result['sum']
+                if not orderpoint.product_id or not orderpoint.location_ids:
+                    orderpoint.qty_to_order = False
+                    continue
+                qty_to_order = 0.0
+                rounding = orderpoint.product_uom.rounding
+                if float_compare(orderpoint.qty_forecast, orderpoint.product_min_qty, precision_rounding=rounding) < 0:
+                    qty_to_order = max(orderpoint.product_min_qty, orderpoint.product_max_qty) - orderpoint.qty_forecast
+
+                    remainder = orderpoint.qty_multiple > 0 and qty_to_order % orderpoint.qty_multiple or 0.0
+                    if float_compare(remainder, 0.0, precision_rounding=rounding) > 0:
+                        qty_to_order += orderpoint.qty_multiple - remainder
+                orderpoint.qty_to_order = qty_to_order
+
+                # if orderpoint.location_ids:
+                #     _logger.critical('-------------------------')
+                #     params = []
+                #     sql = """SELECT SUM(available_quantity) FROM stock_quant
+                #      WHERE product_id = %s AND location_id IN %s;"""
+                #     params.append(orderpoint.product_id.id)
+                #     params.append(tuple(orderpoint.location_ids.ids))
+                #     self.env.cr.execute(sql, params)
+                #     result = self.env.cr.dictfetchone()
+                #     _logger.critical(params)
+                #     _logger.critical(result['sum'])
+                #     if result['sum'] <= orderpoint.product_min_qty:
+                #         _logger.critical('************************')
+                #         orderpoint.qty_to_order = orderpoint.product_max_qty - result['sum']
 
     @api.depends('warehouse_id', 'warehouse_ids')
     def _compute_allowed_location_ids(self):
@@ -43,4 +62,8 @@ class ReorderingRulesInherit(models.Model):
                         [loc_domain, ['|', ('company_id', '=', False), ('company_id', '=', orderpoint.company_id.id)]])
                 orderpoint.allowed_location_ids = self.env['stock.location'].search(loc_domain)
 
-
+    # @api.onchange('one_or_multi_stock')
+    # def onchange_one_or_multi_stock(self):
+    #     if self.one_or_multi_stock == 'multi':
+    #         self.warehouse_id = False
+    #         self.location_id = False
